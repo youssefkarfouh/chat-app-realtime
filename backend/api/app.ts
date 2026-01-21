@@ -1,6 +1,5 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { createServer } from 'http';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import { Server as SocketIOServer } from 'socket.io';
 import connectMongo from './configs/mongo.config';
@@ -8,7 +7,7 @@ import chatRoutes from './routes/chat.routes';
 import { handleSocketConnection } from './controllers/socket.controller';
 
 connectMongo();
-dotenv.config();
+// dotenv.config();
 
 const app: Application = express();
 const httpServer = createServer(app);
