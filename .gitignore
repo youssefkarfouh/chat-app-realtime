@@ -14,18 +14,18 @@ yarn-error.log*
 .env.*.local
 
 # =====================
-# Backend /server
+# Backend /backend
 # =====================
-server/dist/
-server/node_modules/
-server/.env
+backend/dist/
+backend/node_modules/
+backend/.env
 
 # =====================
-# Frontend /client
+# Frontend /frontend
 # =====================
-client/dist/
-client/node_modules/
-client/.env
+frontend/dist/
+frontend/node_modules/
+frontend/.env
 
 # =====================
 # TypeScript
@@ -37,5 +37,5 @@ client/.env
 # =====================
 # Vite
 # =====================
-client/.vite/
-client/.cache/
+frontend/.vite/
+frontend/.cache/
