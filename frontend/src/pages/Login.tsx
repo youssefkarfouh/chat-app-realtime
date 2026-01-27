@@ -42,20 +42,20 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const createRoom = async () => {
-    try {
-      const response = await apiClient.post("/rooms", { roomName: `Room ${rooms.length + 1}` });
-      if (response.data) {
-        toast.success("Room created successfully");
-        console.log("response.data" , response.data);
+  // const createRoom = async () => {
+  //   try {
+  //     const response = await apiClient.post("/rooms", { roomName: `Room ${rooms.length + 1}` });
+  //     if (response.data) {
+  //       toast.success("Room created successfully");
+  //       console.log("response.data" , response.data);
         
-        setRooms((prevRooms) => [...prevRooms, response.data]);
+  //       setRooms((prevRooms) => [...prevRooms, response.data]);
         
-      }
-    } catch (error) {
-      console.error("Error creating room:", error);
-    }
-  }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating room:", error);
+  //   }
+  // }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-800 text-white">
@@ -88,12 +88,7 @@ const LoginPage: React.FC = () => {
       >
         Join Room
       </button>
-      <button
-        onClick={createRoom}
-        className="mt-4 bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
-      >
-        Create New Room
-      </button>
+    
     </div>
   );
 };

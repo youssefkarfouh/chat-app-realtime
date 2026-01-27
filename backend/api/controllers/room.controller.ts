@@ -13,7 +13,7 @@ export const joinChat = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const user = await userService.createOrUpdateUser(name, socketId);
+    const user = await userService.register(name, socketId);
     await roomService.addUserToRoom(roomId, user._id as unknown as string);
     res.status(201).json({ message: 'User joined', user });
   } catch (error) {

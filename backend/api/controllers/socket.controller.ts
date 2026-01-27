@@ -8,7 +8,7 @@ export const handleSocketConnection = (io: Server) => {
 
     // when user want to join a room
     socket.on('join', async ({ name, roomId }) => {
-      await userService.createOrUpdateUser(name, socket.id);
+      // await userService.register(name, socket.id);
       socket.join(roomId);
       console.log(`${name} joined room: ${roomId}`);
     });
@@ -21,7 +21,9 @@ export const handleSocketConnection = (io: Server) => {
         username,
         text,
       );
+
       io.to(roomId).emit('message', message);
+            console.log("hey new message received", message);
     });
 
     // when user disconnects

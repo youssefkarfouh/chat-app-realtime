@@ -30,6 +30,7 @@ const ChatRoom: React.FC = () => {
     socketClient.emit("join", { name: "User", roomId });
 
     socketClient.on("message", (message) => {
+      console.log("hey new message received", message);
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
@@ -40,6 +41,7 @@ const ChatRoom: React.FC = () => {
 
   const handleLogout = () => {
     navigate("/");
+   
     toast.success("User logged out");
   };
 
