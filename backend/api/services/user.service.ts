@@ -6,15 +6,13 @@ import { Response } from "express";
 import { generateToken } from "../utils/generateToken";
 
 export const register = async (
-  email: string,
   password: string,
   username: string,
 ): Promise<IUser> => {
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ username });
 
-  // Custom error
-  if (!email || !password) {
-    throw new AppError("Email and password are required", 400);
+  if (!username || !password) {
+    throw new AppError("Username and password are required", 400);
   }
   if (existingUser) {
     throw new AppError("User already exists", 409);
@@ -23,30 +21,37 @@ export const register = async (
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const newUser = new User({ email, password: hashedPassword, username });
+  const newUser = new User({ username, password: hashedPassword });
 
   return await newUser.save();
 };
 
 export const signIn = async (
-  email: string,
+  username: string,
   password: string,
   res:Response
-): Promise<string> => {
-  const user = await User.findOne({ email });
-
+): Promise<IUser> => {
+  const user = await User.findOne({ username });
   if (!user) {
     throw new AppError("Invalid email or password", 401);
   }
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password as string);
 
   if (!isPasswordValid) {
     throw new AppError("Invalid email or password", 401);
   }
 
- const token = generateToken(user._id.toString(), res);
-  return token;
+  generateToken(user._id.toString(), res);
+
+  const userResponse = {
+    _id: user._id,
+    username: user.username,  
+    socketId: user.socketId,
+    createdAt: user.createdAt,
+    };
+
+  return userResponse;
 };
 
 export const deleteUserBySocketId = async (socketId: string): Promise<void> => {

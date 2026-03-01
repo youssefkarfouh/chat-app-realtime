@@ -5,17 +5,17 @@ import * as roomService from '../services/room.service';
 
 export const joinChat = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, socketId, roomId } = req.body;
-    if (!name || !socketId || !roomId) {
+    const { userId, socketId, roomId } = req.body;
+    if (!userId || !socketId || !roomId) {
       res
         .status(400)
-        .json({ message: 'Name, socketId, and roomId are required' });
+        .json({ message: 'userId, socketId, and roomId are required' });
       return;
     }
-
-    const user = await userService.register(name, socketId);
-    await roomService.addUserToRoom(roomId, user._id as unknown as string);
-    res.status(201).json({ message: 'User joined', user });
+    
+    // const user = await userService.register(userId, socketId);
+    await roomService.addUserToRoom(roomId, userId);
+    res.status(201).json({ message: 'User joined' });
   } catch (error) {
     console.error('Error in joinChat:', error);
     res.status(500).json({ message: 'Internal server error' });
