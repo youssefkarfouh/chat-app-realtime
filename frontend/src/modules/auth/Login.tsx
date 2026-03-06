@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import { FaFacebookF, FaGooglePlusG, FaLinkedinIn, FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useForm } from "react-hook-form";
-import { useAuth } from '../../store/useAuth';
+import { useLogin } from './hooks/useLogin';
 import { useState } from 'react';
 
 function Login() {
-  const { login } = useAuth();
+  const { login, isPending } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -45,22 +45,10 @@ function Login() {
         </div>
 
         {/* Right Side: Sign In (White) */}
-        <div className="md:w-[60%] bg-white flex flex-col items-center justify-center p-12 md:p-24 order-1 md:order-1 h-full min-h-[60vh] md:min-h-screen">
+        <div className="md:w-[60%] bg-white flex flex-col items-center justify-center  order-1 md:order-1 h-full min-h-[60vh] md:min-h-screen">
           <div className="w-full max-w-[420px] flex flex-col items-center">
             <h1 className="text-5xl font-black text-[#6633cc] mb-10 tracking-tight">Sign In</h1>
 
-            {/* Social Icons */}
-            <div className="flex gap-6 mb-8">
-              <a href="#" className="w-14 h-14 flex items-center justify-center border border-gray-100 text-gray-800 transition-all hover:bg-gray-50 hover:border-gray-200">
-                <FaFacebookF size={20} />
-              </a>
-              <a href="#" className="w-14 h-14 flex items-center justify-center border border-gray-100 text-gray-800 transition-all hover:bg-gray-50 hover:border-gray-200">
-                <FaGooglePlusG size={24} />
-              </a>
-              <a href="#" className="w-14 h-14 flex items-center justify-center border border-gray-100 text-gray-800 transition-all hover:bg-gray-50 hover:border-gray-200">
-                <FaLinkedinIn size={20} />
-              </a>
-            </div>
 
             <p className="text-sm text-gray-400 mb-10 tracking-wide">or use your account</p>
 
@@ -115,9 +103,10 @@ function Login() {
               <div className="flex justify-center pt-8">
                 <button
                   type="submit"
-                  className="bg-[#6633cc] cursor-pointer text-white px-20 py-4 text-sm font-black uppercase tracking-[0.2em] transition-all hover:bg-[#5c33a3] hover:translate-y-[-2px] active:translate-y-0"
+                  disabled={isPending}
+                  className="bg-[#6633cc] cursor-pointer text-white px-20 py-4 text-sm font-black uppercase tracking-[0.2em] transition-all hover:bg-[#5c33a3] hover:translate-y-[-2px] active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Sign In
+                  {isPending ? "Signing In..." : "Sign In"}
                 </button>
               </div>
             </form>

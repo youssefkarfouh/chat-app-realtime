@@ -8,15 +8,23 @@ export interface RegisterData {
 
 const AuthService = {
     register: async (userData: RegisterData) => {
-        return await axiosInstance.post('/signup', userData);
+        const { data } = await axiosInstance.post('/register', userData);
+        return data;
     },
 
     login: async (userData: any) => {
-        return await axiosInstance.post('/signin', userData);
+        const { data } = await axiosInstance.post('/login', userData);
+        return data;
     },
 
     logout: async () => {
-        return await axiosInstance.post('/signout');
+        const { data } = await axiosInstance.post('/logout');
+        return data;
+    },
+
+    getUserInfo: async () => {
+        const { data } = await axiosInstance.get('/userinfo');
+        return data;
     }
 };
 

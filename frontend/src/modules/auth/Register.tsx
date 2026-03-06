@@ -2,16 +2,14 @@
 import { Link } from 'react-router-dom'
 import { FaFacebookF, FaGooglePlusG, FaLinkedinIn, FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useForm } from "react-hook-form";
-import { useAuth } from '../../store/useAuth';
-import { useEffect, useState } from 'react';
+import { useRegister } from './hooks/useRegister';
+import { useState } from 'react';
 
 function Register() {
-  const { register: registerUser } = useAuth();
+  const { register: registerUser, isPending } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { register, watch, handleSubmit, formState: { errors, isValid } } = useForm({
-    // mode: "onChange",
-    // reValidateMode: "onChange",
+  const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       username: "user",
       email: "test@yopmail.com",
@@ -21,10 +19,6 @@ function Register() {
   });
 
 
-  useEffect(() => {
-    console.log("errors", errors);
-    console.log("isValid", isValid);
-  }, [errors, isValid]);
 
   const onSubmit = (data: any) => {
     const { username, email, password } = data;
@@ -60,22 +54,10 @@ function Register() {
         </div>
 
         {/* Right Side: Create Account (White) */}
-        <div className="md:w-[60%] bg-white flex flex-col items-center justify-center p-12 md:p-24 order-1 md:order-2 h-full min-h-[60vh] md:min-h-screen">
+        <div className="md:w-[60%] bg-white flex flex-col items-center justify-center  order-1 md:order-2 h-full min-h-[60vh] md:min-h-screen">
           <div className="w-full max-w-[420px] flex flex-col items-center">
             <h1 className="text-5xl font-black text-[#6633cc] mb-10 tracking-tight">Create Account</h1>
 
-            {/* Social Icons */}
-            <div className="flex gap-6 mb-8">
-              <a href="#" className="w-14 h-14 flex items-center justify-center border border-gray-100 text-gray-800 transition-all hover:bg-gray-50 hover:border-gray-200">
-                <FaFacebookF size={20} />
-              </a>
-              <a href="#" className="w-14 h-14 flex items-center justify-center border border-gray-100 text-gray-800 transition-all hover:bg-gray-50 hover:border-gray-200">
-                <FaGooglePlusG size={24} />
-              </a>
-              <a href="#" className="w-14 h-14 flex items-center justify-center border border-gray-100 text-gray-800 transition-all hover:bg-gray-50 hover:border-gray-200">
-                <FaLinkedinIn size={20} />
-              </a>
-            </div>
 
             <p className="text-sm text-gray-400 mb-10 tracking-wide">or use your email for registration</p>
 
@@ -186,9 +168,10 @@ function Register() {
               <div className="flex justify-center pt-8">
                 <button
                   type="submit"
-                  className="bg-[#6633cc] cursor-pointer text-white px-20 py-4 text-sm font-black uppercase tracking-[0.2em] transition-all hover:bg-[#5c33a3] hover:translate-y-[-2px] active:translate-y-0"
+                  disabled={isPending}
+                  className="bg-[#6633cc] cursor-pointer text-white px-20 py-4 text-sm font-black uppercase tracking-[0.2em] transition-all hover:bg-[#5c33a3] hover:translate-y-[-2px] active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Sign Up
+                  {isPending ? "Creating Account..." : "Sign Up"}
                 </button>
               </div>
             </form>

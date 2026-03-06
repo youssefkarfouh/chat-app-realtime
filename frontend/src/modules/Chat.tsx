@@ -3,12 +3,13 @@ import MessageInput from "@components/MessageInput";
 import TopBar from "@components/TopBar";
 import apiClient from "@/global/apiClient";
 import socketClient from "@/global/socketClient";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useLogout } from "./auth/hooks/useLogout";
 
 const ChatRoom: React.FC = () => {
-  const navigate = useNavigate();
+  const { logout } = useLogout();
   const { roomId } = useParams<{ roomId: string }>();
   const [messages, setMessages] = useState<IMessage[]>([]);
 
@@ -40,9 +41,7 @@ const ChatRoom: React.FC = () => {
   }, [roomId]);
 
   const handleLogout = () => {
-    navigate("/");
-   
-    toast.success("User logged out");
+    logout();
   };
 
   return (

@@ -5,7 +5,7 @@ const getErrorMessage = (error: unknown): string =>
   (error as any)?.response?.data?.message ?? 'Something went wrong';
 
 const getSuccessMessage = (data: unknown): string =>
-  (data as any)?.message ?? 'Done!';
+  (data as any)?.data?.message ?? (data as any)?.message;
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
