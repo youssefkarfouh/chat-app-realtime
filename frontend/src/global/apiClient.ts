@@ -15,4 +15,16 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+axiosInstance.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    // Let React Query / mutationCache handle toast
+    // Only handle auth-level errors here
+    if (error?.response?.status === 401) {
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;

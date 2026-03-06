@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom'
 import { FaFacebookF, FaGooglePlusG, FaLinkedinIn, FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useForm } from "react-hook-form";
-import { useAuth } from '../store/useAuth';
+import { useAuth } from '../../store/useAuth';
 import { useEffect, useState } from 'react';
 
 function Register() {
@@ -13,22 +13,22 @@ function Register() {
     // mode: "onChange",
     // reValidateMode: "onChange",
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      username: "user",
+      email: "test@yopmail.com",
+      password: "Admin@123",
+      confirmPassword: "Admin@123",
     },
   });
 
 
   useEffect(() => {
     console.log("errors", errors);
-  }, [errors]);
+    console.log("isValid", isValid);
+  }, [errors, isValid]);
 
   const onSubmit = (data: any) => {
-    // const { name, email, password } = data;
-    // registerUser({ name, email, password });
-    console.log("errors", errors);
+    const { username, email, password } = data;
+    registerUser({ username, email, password });
 
   }
 
@@ -86,7 +86,7 @@ function Register() {
                     <FaUser />
                   </span>
                   <input
-                    {...register('name', {
+                    {...register('username', {
                       required: 'Name cannot be empty.',
                     })}
                     type="text"
@@ -94,8 +94,8 @@ function Register() {
                     className="w-full bg-[#f8f8f8] border-none py-4 pl-14 pr-5 text-base focus:ring-0 focus:bg-[#f0f0f0] outline-none transition-all"
                   />
                 </div>
-                {errors.name && (
-                  <div className="text-red-500 text-sm mt-1">{errors.name.message}</div>
+                {errors.username && (
+                  <div className="text-red-500 text-sm mt-1">{errors.username.message}</div>
                 )}
               </div>
 

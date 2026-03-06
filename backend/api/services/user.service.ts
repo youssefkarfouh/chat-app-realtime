@@ -8,8 +8,9 @@ import { generateToken } from "../utils/generateToken";
 export const register = async (
   password: string,
   username: string,
+  email: string,
 ): Promise<IUser> => {
-  const existingUser = await User.findOne({ username });
+  const existingUser = await User.findOne({ email });
 
   if (!username || !password) {
     throw new AppError("Username and password are required", 400);
@@ -21,15 +22,24 @@ export const register = async (
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const newUser = new User({ username, password: hashedPassword });
+  const newUser = new User({ username, password: hashedPassword, email });
 
-  return await newUser.save();
+  const savedUser = await newUser.save()
+
+  const userResponse = {
+    _id: savedUser._id,
+    username: savedUser.username,
+    email: savedUser.email,
+    createdAt: savedUser.createdAt,
+  };
+
+  return userResponse as IUser;
 };
 
 export const signIn = async (
   username: string,
   password: string,
-  res:Response
+  res: Response
 ): Promise<IUser> => {
   const user = await User.findOne({ username });
   if (!user) {
@@ -46,10 +56,11 @@ export const signIn = async (
 
   const userResponse = {
     _id: user._id,
-    username: user.username,  
+    username: user.username,
     socketId: user.socketId,
     createdAt: user.createdAt,
-    };
+    email: user.email,
+  };
 
   return userResponse;
 };

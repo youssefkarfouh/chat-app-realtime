@@ -7,10 +7,10 @@ export const signUp = async (
   next: NextFunction,
 ) => {
   try {
-    const { username, password } = req.body;
-    const response = await userService.register(password, username);
+    const { username, email, password } = req.body;
+    const response = await userService.register(password, username, email);
 
-    return res.status(201).json(response);
+    return res.status(201).json({ message: 'Signed up successfully', ...response });
   } catch (err) {
     next(err);
   }
@@ -25,10 +25,19 @@ export const signIn = async (
     const { username, password } = req.body;
 
     const response = await userService.signIn(username, password, res);
-    return res.status(200).json({ message : 'Signed in successfully', ...response });
+    return res.status(200).json({ message: 'Signed in successfully', ...response });
   } catch (err) {
     next(err);
   }
 };
 
-export const signOut = (req: Request, res: Response) => {};
+export const signOut = (req: Request, res: Response) => { };
+
+export const getUserInfo = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const user = req.user;
+    return res.status(200).json({ message: 'User info fetched successfully', user });
+  } catch (err) {
+    next(err);
+  }
+};

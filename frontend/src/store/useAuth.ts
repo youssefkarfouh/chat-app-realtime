@@ -1,7 +1,6 @@
 import { create } from 'zustand'
-import axiosInstance from '../global/apiClient';
-
-
+import AuthService from '../modules/auth/services/auth.service';
+import type { RegisterData } from '../modules/auth/services/auth.service';
 
 export interface AuthState {
   user: any;
@@ -10,13 +9,12 @@ export interface AuthState {
   setAccessToken: (accessToken: any) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
-  register: (userData: any) => Promise<void>;
+  register: (userData: RegisterData) => Promise<void>;
   login: (userData: any) => Promise<void>;
   logout: () => Promise<void>;
 }
+
 export const useAuth = create<AuthState>((set) => ({
-
-
   user: null,
   setUser: (user: any) => set({ user }),
 
@@ -26,10 +24,9 @@ export const useAuth = create<AuthState>((set) => ({
   isAuthenticated: false,
   setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
 
-
-  register: async (userData: any) => {
+  register: async (userData: RegisterData) => {
     try {
-      const response = await axiosInstance.post('/register', userData);
+      const response = await AuthService.register(userData);
       console.log(response.data);
     } catch (error) {
       console.error('Error in register:', error);
@@ -38,7 +35,7 @@ export const useAuth = create<AuthState>((set) => ({
 
   login: async (userData: any) => {
     try {
-      const response = await axiosInstance.post('/login', userData);
+      const response = await AuthService.login(userData);
       set({ user: response.data.user, accessToken: response.data.accessToken, isAuthenticated: true });
     } catch (error) {
       console.error('Error in login:', error);
@@ -47,12 +44,11 @@ export const useAuth = create<AuthState>((set) => ({
 
   logout: async () => {
     try {
-      await axiosInstance.post('/logout');
+      await AuthService.logout();
       set({ user: null, accessToken: null, isAuthenticated: false });
     } catch (error) {
       console.error('Error in logout:', error);
     }
   },
-
 }))
 

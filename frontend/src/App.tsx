@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ChatPage from "./pages/Chat";
+import ChatPage from "./modules/Chat";
 import { Toaster } from "sonner";
 import Layout from "./components/layout";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import JoinRoom from "./pages/JoinRoom";
+import Login from "./modules/auth/Login";
+import Register from "./modules/auth/Register";
+import JoinRoom from "./modules/JoinRoom";
 
 function App() {
   return (
