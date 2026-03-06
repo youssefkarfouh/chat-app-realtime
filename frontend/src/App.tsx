@@ -2,9 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ChatPage from "./modules/Chat";
 import { Toaster } from "sonner";
 import Layout from "./components/layout";
-import Login from "./modules/auth/Login";
-import Register from "./modules/auth/Register";
 import JoinRoom from "./modules/JoinRoom";
+import Login from "./modules/auth/components/Login";
+import Register from "./modules/auth/components/Register";
 
 function App() {
   return (

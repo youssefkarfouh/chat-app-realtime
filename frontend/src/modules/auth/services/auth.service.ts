@@ -25,6 +25,10 @@ const AuthService = {
     getUserInfo: async () => {
         const { data } = await axiosInstance.get('/userinfo');
         return data;
+    },
+    refreshToken: async () => {
+        const { data } = await axiosInstance.post('/refresh');
+        return data;
     }
 };
 

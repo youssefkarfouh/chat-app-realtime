@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AppError } from "../utils/AppError";
+import { AppError } from "../exceptions/AppError";
 import mongoose from "mongoose";
 
 export const errorMiddleware = (
@@ -9,7 +9,7 @@ export const errorMiddleware = (
   next: NextFunction
 ) => {
 
-    // Mongoose validation error
+  // Mongoose validation error
   if (err instanceof mongoose.Error.ValidationError) {
     const messages = Object.values(err.errors).map(e => e.message);
     return res.status(400).json({

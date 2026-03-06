@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useForm } from "react-hook-form";
-import { useLogin } from './hooks/useLogin';
 import { useState } from 'react';
+import { useLogin } from '../hooks/useLogin';
 
 function Login() {
   const { login, isPending } = useLogin();

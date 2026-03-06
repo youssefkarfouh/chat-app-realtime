@@ -1,7 +1,7 @@
 import { IUser, User } from "../models/user.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { AppError } from "../utils/AppError";
+import { AppError } from "../exceptions/AppError";
 import { Response } from "express";
 import { generateToken } from "../utils/generateToken";
 

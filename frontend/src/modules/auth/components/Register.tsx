@@ -1,9 +1,9 @@
 
 import { Link } from 'react-router-dom'
-import { FaFacebookF, FaGooglePlusG, FaLinkedinIn, FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useForm } from "react-hook-form";
-import { useRegister } from './hooks/useRegister';
 import { useState } from 'react';
+import { useRegister } from '../hooks/useRegister';
 
 function Register() {
   const { register: registerUser, isPending } = useRegister();
