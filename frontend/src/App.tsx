@@ -1,33 +1,40 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ChatPage from "./modules/chat/Chat";
 import { Toaster } from "sonner";
-import Layout from "./components/layout";
 import JoinRoom from "./modules/chat/JoinRoom";
 import Login from "./modules/auth/components/Login";
 import Register from "./modules/auth/components/Register";
 import { useAuth } from "./store/useAuth";
 import { useEffect } from "react";
+import ProtectedRoute from "./components/protected-route";
 
 function App() {
-  const { initializeAuth } = useAuth();
+  const { initializeAuth, isInitializing } = useAuth();
 
   useEffect(() => {
     initializeAuth();
   }, []);
 
-
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f6f5f7]">
+        <div className="text-2xl font-bold text-[#6633cc] animate-pulse">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route element={<Layout />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Route>
 
-          <Route path="/" element={<JoinRoom />} />
-          <Route path="/chats/:roomId" element={<ChatPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<JoinRoom />} />
+            <Route path="/chats/:roomId" element={<ChatPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
       <Toaster />

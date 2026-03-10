@@ -106,18 +106,18 @@ export const handleRefreshToken = async (cookies: any) => {
     }
 
     const roles = foundUser.roles ? Object.values(foundUser.roles) : [];
-    const user = decoded.username;
     const accessToken = jwt.sign(
       {
         "UserInfo": {
           "username": decoded.username,
-          "roles": roles
+          "roles": roles,
+          "userId": foundUser._id,
         }
       },
       process.env.ACCESS_TOKEN_SECRET!,
       { expiresIn: '1h' }
     );
-    return { user, roles, accessToken };
+    return { user: decoded.username, roles, accessToken };
   } catch (err) {
     throw new AppError('Forbidden', 403);
   }

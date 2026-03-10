@@ -21,7 +21,8 @@ axiosInstance.interceptors.response.use(
     // Let React Query / mutationCache handle toast
     // Only handle auth-level errors here
     if (error?.response?.status === 401) {
-      window.location.href = '/login';
+      // Removed: window.location.href = '/login';
+      // The app state and ProtectedRoute will handle redirection
     }
     return Promise.reject(error);
   }

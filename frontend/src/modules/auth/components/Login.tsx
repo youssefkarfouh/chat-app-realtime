@@ -9,8 +9,8 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      username: "user",
-      password: "Admin@123",
+      email: "youssef@yopmail.com",
+      password: "123321@@",
     },
   });
 
@@ -59,16 +59,16 @@ function Login() {
                     <FaUser />
                   </span>
                   <input
-                    {...register('username', {
-                      required: 'Username is required.',
+                    {...register('email', {
+                      required: 'Email is required.',
                     })}
                     type="text"
-                    placeholder="Username"
+                    placeholder="Email"
                     className="w-full bg-[#f8f8f8] border-none py-4 pl-14 pr-5 text-base focus:ring-0 focus:bg-[#f0f0f0] outline-none transition-all"
                   />
                 </div>
-                {errors.username && (
-                  <div className="text-red-500 text-sm mt-1">{errors.username.message}</div>
+                {errors.email && (
+                  <div className="text-red-500 text-sm mt-1">{errors.email.message}</div>
                 )}
               </div>
 

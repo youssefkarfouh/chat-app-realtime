@@ -6,18 +6,21 @@ import { useNavigate } from "react-router-dom";
 
 export const useLogin = () => {
     const navigate = useNavigate();
-    const { setUser, setAccessToken, setIsAuthenticated } = useAuth();
+    const { setAccessToken, setUser } = useAuth();
 
     const { mutate: login, isPending } = useMutation({
         mutationFn: (userData: any) => AuthService.login(userData),
         onSuccess: (response) => {
-            const { user, accessToken } = response.data;
-            setUser(user);
-            setAccessToken(accessToken);
-            setIsAuthenticated(true);
+            console.log("response", response);
 
-
-            navigate("/");
+            const { token } = response;
+            setAccessToken(token);
+            AuthService.getUserInfo().then((user) => {
+                setUser(user);
+            }).catch((error) => {
+                console.error("Failed to fetch user info during login", error);
+            });
+            navigate('/');
         },
 
     });
