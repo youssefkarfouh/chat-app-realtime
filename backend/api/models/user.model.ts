@@ -6,6 +6,8 @@ export interface IUser {
   email: string;
   socketId?: string;
   createdAt: Date;
+  refreshToken?: string;
+  roles?: string[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -13,6 +15,12 @@ const UserSchema: Schema = new Schema({
   password: { type: String, required: true },
   email: { type: String, required: true },
   socketId: { type: String, required: false },
+  refreshToken: { type: String, required: false },
+  roles: {
+    type: [String], // Array of strings
+    default: ['User'],
+    enum: ['User', 'Admin'] // Default role is 'User'
+  },
   createdAt: { type: Date, default: Date.now },
 });
 

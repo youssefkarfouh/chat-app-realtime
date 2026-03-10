@@ -8,6 +8,7 @@ import chatRoutes from './routes/chat.routes';
 import authRoutes from './routes/auth.routes';
 import { handleSocketConnection } from './controllers/socket.controller';
 import { errorMiddleware } from './middlewares/errorMiddleware';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 connectMongo();
@@ -23,6 +24,7 @@ const io = new SocketIOServer(httpServer, {
 });
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,

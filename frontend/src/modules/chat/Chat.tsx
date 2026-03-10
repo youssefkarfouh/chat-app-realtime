@@ -6,7 +6,7 @@ import socketClient from "@/global/socketClient";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useLogout } from "./auth/hooks/useLogout";
+import { useLogout } from "../auth/hooks/useLogout";
 
 const ChatRoom: React.FC = () => {
   const { logout } = useLogout();

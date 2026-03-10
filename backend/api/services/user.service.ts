@@ -2,8 +2,8 @@ import { IUser, User } from "../models/user.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { AppError } from "../exceptions/AppError";
-import { Response } from "express";
-import { generateToken } from "../utils/generateToken";
+import { Request, Response } from "express";
+
 
 export const register = async (
   password: string,
@@ -31,40 +31,97 @@ export const register = async (
     username: savedUser.username,
     email: savedUser.email,
     createdAt: savedUser.createdAt,
+    roles: savedUser.roles,
   };
 
   return userResponse as IUser;
 };
-
-export const signIn = async (
-  username: string,
-  password: string,
-  res: Response
-): Promise<IUser> => {
-  const user = await User.findOne({ username });
-  if (!user) {
-    throw new AppError("Invalid email or password", 401);
+export const signIn = async (email: string, password: string, res: Response): Promise<string> => {
+  if (!email || !password) {
+    throw new AppError("Username and password are required", 400);
   }
 
-  const isPasswordValid = await bcrypt.compare(password, user.password as string);
+  const foundUser = await User.findOne({ email }).exec();
 
-  if (!isPasswordValid) {
-    throw new AppError("Invalid email or password", 401);
+  if (!foundUser) {
+    throw new AppError("Invalid username or password", 401);
   }
 
-  generateToken(user._id.toString(), res);
+  // evaluate password 
+  if (!foundUser.password) {
+    throw new AppError("Invalid username or password", 401);
+  }
 
-  const userResponse = {
-    _id: user._id,
-    username: user.username,
-    socketId: user.socketId,
-    createdAt: user.createdAt,
-    email: user.email,
-  };
+  const match = await bcrypt.compare(password, foundUser.password);
+  if (!match) {
+    throw new AppError("Invalid username or password", 401);
+  }
 
-  return userResponse;
-};
+  const roles = foundUser.roles;
 
+  // create JWTs
+  const accessToken = jwt.sign(
+    {
+      "UserInfo": {
+        "username": foundUser.username,
+        "roles": roles,
+        "userId": foundUser._id,
+      },
+    },
+    process.env.ACCESS_TOKEN_SECRET!,
+    { expiresIn: '1h' }
+  );
+  const refreshToken = jwt.sign(
+    { "username": foundUser.username },
+    process.env.REFRESH_TOKEN_SECRET!,
+    { expiresIn: '1d' }
+  );
+
+  // Saving refreshToken with current user in db
+  foundUser.refreshToken = refreshToken;
+  await foundUser.save();
+
+  res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'none', secure: true, maxAge: 24 * 60 * 60 * 1000 });
+
+  return accessToken;
+}
+export const handleRefreshToken = async (cookies: any) => {
+
+  if (!cookies?.jwt) throw new AppError('Refresh token missing', 401);
+  const refreshToken = cookies.jwt;
+
+  const foundUser = await User.findOne({ refreshToken }).exec();
+
+  if (!foundUser) throw new AppError('Forbidden', 403);
+
+  // evaluate jwt 
+  try {
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    ) as any;
+
+    if (foundUser.username !== decoded?.username) {
+      throw new AppError('Forbidden', 403);
+    }
+
+    const roles = foundUser.roles ? Object.values(foundUser.roles) : [];
+    const user = decoded.username;
+    const accessToken = jwt.sign(
+      {
+        "UserInfo": {
+          "username": decoded.username,
+          "roles": roles
+        }
+      },
+      process.env.ACCESS_TOKEN_SECRET!,
+      { expiresIn: '1h' }
+    );
+    return { user, roles, accessToken };
+  } catch (err) {
+    throw new AppError('Forbidden', 403);
+  }
+}
 export const deleteUserBySocketId = async (socketId: string): Promise<void> => {
   await User.deleteOne({ socketId });
 };
