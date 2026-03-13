@@ -6,14 +6,14 @@ import { useNavigate } from "react-router-dom";
 
 export const useLogout = () => {
     const navigate = useNavigate();
-    const { setUser, setAccessToken, setIsAuthenticated } = useAuth();
+    const { setUser, setAccessToken } = useAuth();
 
     const { mutate: logout, isPending } = useMutation({
         mutationFn: () => AuthService.logout(),
         onSettled: () => {
             setUser(null);
             setAccessToken(null);
-            setIsAuthenticated(false);
+
             navigate("/login");
         },
         onSuccess: () => {

@@ -17,10 +17,11 @@ export const useLogin = () => {
             setAccessToken(token);
             AuthService.getUserInfo().then((user) => {
                 setUser(user);
+                navigate('/', { replace: true });
             }).catch((error) => {
                 console.error("Failed to fetch user info during login", error);
             });
-            navigate('/');
+
         },
 
     });

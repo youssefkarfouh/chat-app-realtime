@@ -7,6 +7,7 @@ import Register from "./modules/auth/components/Register";
 import { useAuth } from "./store/useAuth";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/protected-route";
+import GuestRoute from "./components/guest-route";
 
 function App() {
   const { initializeAuth, isInitializing } = useAuth();
@@ -28,8 +29,10 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route element={<GuestRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
 
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<JoinRoom />} />

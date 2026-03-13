@@ -6,8 +6,6 @@ export interface AuthState {
   setUser: (user: any) => void;
   accessToken: any;
   setAccessToken: (accessToken: any) => void;
-  isAuthenticated: boolean;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
   initializeAuth: () => Promise<void>;
   clearAuth: () => void;
   isInitializing: boolean;
@@ -19,10 +17,6 @@ export const useAuth = create<AuthState>((set, get) => ({
 
   accessToken: null,
   setAccessToken: (accessToken: any) => set({ accessToken }),
-
-  isAuthenticated: false,
-  setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
-
   isInitializing: true,
 
   initializeAuth: async () => {
@@ -30,7 +24,7 @@ export const useAuth = create<AuthState>((set, get) => ({
     try {
       const response = await AuthService.refreshToken();
       if (response && response.accessToken) {
-        set({ accessToken: response.accessToken, isAuthenticated: true });
+        set({ accessToken: response.accessToken });
         const userInfoResponse = await AuthService.getUserInfo();
         if (userInfoResponse && userInfoResponse.user) {
           set({ user: userInfoResponse.user });
@@ -43,7 +37,7 @@ export const useAuth = create<AuthState>((set, get) => ({
     }
   },
   clearAuth: () => {
-    set({ user: null, accessToken: null, isAuthenticated: false });
+    set({ user: null, accessToken: null });
   },
 
 }))
