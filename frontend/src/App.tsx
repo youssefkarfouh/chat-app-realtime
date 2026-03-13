@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ChatPage from "./modules/chat/components/Chat";
-import { Toaster } from "sonner";
 import JoinRoom from "./modules/chat/components/JoinRoom";
 import Login from "./modules/auth/components/Login";
 import Register from "./modules/auth/components/Register";
@@ -40,7 +39,6 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-      <Toaster />
     </>
   );
 }

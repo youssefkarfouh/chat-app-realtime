@@ -5,7 +5,7 @@ import apiClient from "@/global/apiClient";
 import socketClient from "@/global/socketClient";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { message } from "antd";
 import { useLogout } from "@/modules/auth/hooks/useLogout";
 
 const ChatRoom: React.FC = () => {
@@ -20,7 +20,7 @@ const ChatRoom: React.FC = () => {
         setMessages(response.data);
       } catch (error) {
         console.error("Failed to fetch messages:", error);
-        toast.error("Failed to fetch messages");
+        message.error("Failed to fetch messages");
       }
     };
 
