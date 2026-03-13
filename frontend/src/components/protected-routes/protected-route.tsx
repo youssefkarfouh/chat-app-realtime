@@ -1,4 +1,4 @@
-import { useAuth } from "@/store/useAuth";
+import { useAuth } from "@/global/store/useAuth";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 /**

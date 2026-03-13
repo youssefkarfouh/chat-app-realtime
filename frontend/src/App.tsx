@@ -1,13 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ChatPage from "./modules/chat/Chat";
+import ChatPage from "./modules/chat/components/Chat";
 import { Toaster } from "sonner";
-import JoinRoom from "./modules/chat/JoinRoom";
+import JoinRoom from "./modules/chat/components/JoinRoom";
 import Login from "./modules/auth/components/Login";
 import Register from "./modules/auth/components/Register";
-import { useAuth } from "./store/useAuth";
+import { useAuth } from "./global/store/useAuth";
 import { useEffect } from "react";
-import ProtectedRoute from "./components/protected-route";
-import GuestRoute from "./components/guest-route";
+import ProtectedRoute from "./components/protected-routes/protected-route";
+import GuestRoute from "./components/protected-routes/guest-route";
 
 function App() {
   const { initializeAuth, isInitializing } = useAuth();

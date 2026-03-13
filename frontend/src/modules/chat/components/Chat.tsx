@@ -1,12 +1,12 @@
-import Message, { type IMessage } from "@components/Message";
-import MessageInput from "@components/MessageInput";
+import Message, { type IMessage } from "@/modules/chat/components/Message";
+import MessageInput from "@/modules/chat/components/MessageInput";
 import TopBar from "@components/TopBar";
 import apiClient from "@/global/apiClient";
 import socketClient from "@/global/socketClient";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useLogout } from "../auth/hooks/useLogout";
+import { useLogout } from "@/modules/auth/hooks/useLogout";
 
 const ChatRoom: React.FC = () => {
   const { logout } = useLogout();
