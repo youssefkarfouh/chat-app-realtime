@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 
-function Layout() {
+function MainLayout() {
   return (
     <div className="w-full h-screen overflow-auto">
       <Outlet />
@@ -8,4 +8,4 @@ function Layout() {
   )
 }
 
-export default Layout
+export default MainLayout

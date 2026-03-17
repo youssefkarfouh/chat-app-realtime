@@ -8,13 +8,13 @@ export const handleSocketConnection = (io: Server) => {
 
     // when user want to join a room
     socket.on('join', async ({ name, roomId }) => {
-      // await userService.register(name, socket.id);
+
       socket.join(roomId);
       console.log(`${name} joined room: ${roomId}`);
     });
 
     // when user sends a message
-    socket.on('message', async ({ roomId, senderId, username, text }) => {
+    socket.on('sendMessage', async ({ roomId, senderId, username, text }) => {
       const message = await messageService.createMessage(
         roomId,
         senderId,
@@ -22,8 +22,8 @@ export const handleSocketConnection = (io: Server) => {
         text,
       );
 
-      io.to(roomId).emit('message', message);
-            console.log("hey new message received", message);
+      io.to(roomId).emit('sendMessage', message);
+      console.log("new message received backend", message);
     });
 
     // when user disconnects

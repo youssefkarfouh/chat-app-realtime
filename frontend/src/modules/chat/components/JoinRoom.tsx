@@ -1,46 +1,35 @@
-import apiClient from "@/global/apiClient";
 import socketClient from "@/global/socketClient";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { message } from "antd";
+import React, { useState } from "react";
 import { FaUser, FaDoorOpen, FaComments, FaUsers } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { useRooms } from "../hooks/useRooms";
+import type { IRoom } from "../types/chat.interface";
 
-interface Room {
-  id: string;
-  name: string;
-}
 
 const JoinRoom: React.FC = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm<{
+    name: string;
+    roomId: string;
+  }>({
+    defaultValues: {
+      name: "",
+      roomId: "",
+    },
+  });
   const [name, setName] = useState("");
-  const [rooms, setRooms] = useState<Room[]>([]);
   const [selectedRoomId, setSelectedRoomId] = useState("");
   const navigate = useNavigate();
+  const { data: rooms, isLoading, error } = useRooms();
 
-  const fetchRooms = async () => {
-    try {
-      const response = await apiClient.get("/rooms");
-      if (!response.data) {
-        throw new Error("Failed to fetch rooms");
-      }
-      setRooms(response.data);
-    } catch (error) {
-      console.error("Error fetching rooms:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchRooms();
-  }, []);
 
   const handleJoinRoom = () => {
-    if (name && selectedRoomId) {
-      socketClient.emit("join", { name, roomId: selectedRoomId });
-      localStorage.setItem("username", name);
-      navigate(`/chats/${selectedRoomId}`);
-    }
-    else {
-      message.error("Please enter your name and select a room");
-    }
+
+    socketClient.emit("join", { name, roomId: selectedRoomId });
+    localStorage.setItem("username", name);
+    navigate(`/chats/${selectedRoomId}`);
+
+
   };
 
   // const createRoom = async () => {
@@ -79,7 +68,7 @@ const JoinRoom: React.FC = () => {
             <div className="flex items-center justify-center gap-8 mt-4">
               <div className="flex flex-col items-center gap-2 opacity-70">
                 <FaUsers size={28} />
-                <span className="text-sm font-medium">{rooms.length} Rooms</span>
+                <span className="text-sm font-medium">{rooms?.length} Rooms</span>
               </div>
               <div className="w-px h-12 bg-white/30"></div>
               <div className="flex flex-col items-center gap-2 opacity-70">
@@ -98,61 +87,69 @@ const JoinRoom: React.FC = () => {
             <p className="text-sm text-gray-400 mb-10 tracking-wide">enter your name and select a room</p>
 
             <div className="w-full space-y-6">
-              {/* Name input */}
-              <div className="group">
-                <div className="relative">
-                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#6633cc] transition-colors">
-                    <FaUser />
-                  </span>
-                  <input
-                    type="text"
-                    placeholder="Your display name"
-                    className="w-full bg-[#f8f8f8] border-none py-4 pl-14 pr-5 text-base focus:ring-0 focus:bg-[#f0f0f0] outline-none transition-all"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
+              <form onSubmit={handleSubmit(handleJoinRoom)}>
+                {/* Name input */}
+                <div className="group">
+                  <div className="relative">
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#6633cc] transition-colors">
+                      <FaUser />
+                    </span>
+                    <input
+                      type="text"
+                      autoComplete="on"
+                      placeholder="Your display name"
+                      className="w-full bg-[#f8f8f8] border-none py-4 pl-14 pr-5 text-base focus:ring-0 focus:bg-[#f0f0f0] outline-none transition-all"
+                      {...register('name', {
+                        required: 'Name is required.',
+                      })}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    {errors.name && <p className="text-red-500 text-sm mt-2">{errors.name.message}</p>}
+                  </div>
                 </div>
-              </div>
 
-              {/* Room select */}
-              <div className="group">
-                <div className="relative">
-                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#6633cc] transition-colors">
-                    <FaDoorOpen />
-                  </span>
-                  <select
-                    key={selectedRoomId}
-                    className="w-full bg-[#f8f8f8] border-none py-4 pl-14 pr-5 text-base focus:ring-0 focus:bg-[#f0f0f0] outline-none transition-all appearance-none cursor-pointer"
-                    value={selectedRoomId}
-                    onChange={(e) => setSelectedRoomId(e.target.value)}
-                  >
-                    <option value="" disabled>
-                      Select a Room
-                    </option>
-                    {rooms.map((room) => (
-                      <option key={room.id} value={room.id}>
-                        {room.name}
+                {/* Room select */}
+                <div className="group">
+                  <div className="relative">
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#6633cc] transition-colors">
+                      <FaDoorOpen />
+                    </span>
+                    <select
+                      {...register('roomId', {
+                        required: 'Room is required.',
+                      })}
+                      key={selectedRoomId}
+                      className="w-full bg-[#f8f8f8] border-none py-4 pl-14 pr-5 text-base focus:ring-0 focus:bg-[#f0f0f0] outline-none transition-all appearance-none cursor-pointer"
+                      onChange={(e) => setSelectedRoomId(e.target.value)}
+                    >
+                      <option value="" disabled>
+                        Select a Room
                       </option>
-                    ))}
-                  </select>
-                  {/* Dropdown arrow */}
-                  <span className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                      <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
+                      {rooms?.map((room: IRoom) => (
+                        <option key={room._id} value={room._id}>
+                          {room.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.roomId && <p className="text-red-500 text-sm mt-2">{errors.roomId.message}</p>}
+                    {/* Dropdown arrow */}
+                    <span className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                      <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                        <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              {/* Join Button */}
-              <div className="flex justify-center pt-8">
-                <button
-                  onClick={handleJoinRoom}
-                  className="bg-[#6633cc] cursor-pointer text-white px-20 py-4 text-sm font-black uppercase tracking-[0.2em] transition-all hover:bg-[#5c33a3] hover:translate-y-[-2px] active:translate-y-0"
-                >
-                  Join Room
-                </button>
-              </div>
+                {/* Join Button */}
+                <div className="flex justify-center pt-8">
+                  <button
+                    className="bg-[#6633cc] cursor-pointer text-white px-20 py-4 text-sm font-black uppercase tracking-[0.2em] transition-all hover:bg-[#5c33a3] hover:translate-y-[-2px] active:translate-y-0"
+                  >
+                    Join Room
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

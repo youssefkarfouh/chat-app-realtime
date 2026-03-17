@@ -7,6 +7,7 @@ import { useAuth } from "./global/store/useAuth";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/protected-routes/protected-route";
 import GuestRoute from "./components/protected-routes/guest-route";
+import MainLayout from "./components/layout/MainLayout";
 
 function App() {
   const { initializeAuth, isInitializing } = useAuth();
@@ -34,8 +35,10 @@ function App() {
           </Route>
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<JoinRoom />} />
-            <Route path="/chats/:roomId" element={<ChatPage />} />
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<JoinRoom />} />
+              <Route path="/chats/:roomId" element={<ChatPage />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

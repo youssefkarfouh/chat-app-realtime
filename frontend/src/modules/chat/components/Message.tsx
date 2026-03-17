@@ -1,11 +1,7 @@
 import moment from "moment";
+import type { IMessage } from "../types/chat.interface";
 
-export interface IMessage {
-  username: string;
-  sender: string;
-  createdAt: string;
-  text: string;
-}
+
 
 const Message: React.FC<{ message: IMessage }> = ({ message }) => {
   const avatarUrl = `https://ui-avatars.com/api/?name=${message.username.toUpperCase()}&background=random`;
@@ -15,7 +11,7 @@ const Message: React.FC<{ message: IMessage }> = ({ message }) => {
       <div className="shrink-0 mr-4">
         <img
           src={avatarUrl}
-          alt={message.sender}
+          alt={message.username}
           width={45}
           height={45}
           className="rounded-full"

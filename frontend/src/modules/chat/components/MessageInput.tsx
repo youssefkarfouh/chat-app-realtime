@@ -10,7 +10,7 @@ const MessageInput: React.FC<{ roomId: string }> = ({ roomId }) => {
 
   const handleSendMessage = () => {
     if (text && username) {
-      socketClient.emit("message", {
+      socketClient.emit("sendMessage", {
         roomId,
         senderId: socketClient.id,
         username,
