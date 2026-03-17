@@ -28,8 +28,7 @@ export const handleSocketConnection = (io: Server) => {
 
     // when user disconnects
     socket.on('disconnect', async () => {
-      await userService.deleteUserBySocketId(socket.id);
-      console.log(`User disconnected: ${socket.id}`);
+
     });
   });
 };

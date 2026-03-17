@@ -23,7 +23,9 @@ const JoinRoom: React.FC = () => {
   const { data: rooms, isLoading, error } = useRooms();
 
 
+
   const handleJoinRoom = () => {
+
 
     socketClient.emit("join", { name, roomId: selectedRoomId });
     localStorage.setItem("username", name);

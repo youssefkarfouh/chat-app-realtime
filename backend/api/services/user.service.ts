@@ -122,6 +122,3 @@ export const handleRefreshToken = async (cookies: any) => {
     throw new AppError('Forbidden', 403);
   }
 }
-export const deleteUserBySocketId = async (socketId: string): Promise<void> => {
-  await User.deleteOne({ socketId });
-};

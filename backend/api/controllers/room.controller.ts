@@ -12,8 +12,8 @@ export const joinChat = async (req: Request, res: Response): Promise<void> => {
         .json({ message: 'userId, socketId, and roomId are required' });
       return;
     }
-    
-    // const user = await userService.register(userId, socketId);
+
+
     await roomService.addUserToRoom(roomId, userId);
     res.status(201).json({ message: 'User joined' });
   } catch (error) {
