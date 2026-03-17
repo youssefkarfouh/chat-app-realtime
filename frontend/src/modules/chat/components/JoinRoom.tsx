@@ -20,7 +20,7 @@ const JoinRoom: React.FC = () => {
   const [name, setName] = useState("");
   const [selectedRoomId, setSelectedRoomId] = useState("");
   const navigate = useNavigate();
-  const { data: rooms, isLoading, error } = useRooms();
+  const { data: rooms } = useRooms();
 
 
 

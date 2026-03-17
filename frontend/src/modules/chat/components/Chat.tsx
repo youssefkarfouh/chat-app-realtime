@@ -3,7 +3,7 @@ import MessageInput from "@/modules/chat/components/MessageInput";
 import TopBar from "@/modules/chat/components/TopBar";
 import socketClient from "@/global/socketClient";
 import { useParams } from "react-router-dom";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLogout } from "@/modules/auth/hooks/useLogout";
 import useMessages from "@/modules/chat/hooks/useMessages";
 import type { IMessage } from "../types/chat.interface";
