@@ -5,6 +5,7 @@ import { FaUser, FaDoorOpen, FaComments, FaUsers } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useRooms } from "../hooks/useRooms";
 import type { IRoom } from "../types/chat.interface";
+import { useJoinRoom } from "../hooks/useJoinRoom";
 
 
 const JoinRoom: React.FC = () => {
@@ -21,12 +22,11 @@ const JoinRoom: React.FC = () => {
   const [selectedRoomId, setSelectedRoomId] = useState("");
   const navigate = useNavigate();
   const { data: rooms } = useRooms();
-
+  const { mutate: joinRoom } = useJoinRoom();
 
 
   const handleJoinRoom = () => {
-
-
+    joinRoom(selectedRoomId);
     socketClient.emit("join", { name, roomId: selectedRoomId });
     localStorage.setItem("username", name);
     navigate(`/chats/${selectedRoomId}`);
@@ -50,17 +50,12 @@ const JoinRoom: React.FC = () => {
   // }
 
   return (
-    <div className="min-h-screen bg-[#f6f5f7] text-[#333] flex flex-col">
+    <div className="h-full bg-[#f6f5f7] text-[#333] flex flex-col">
       <div className="flex-1 w-full flex flex-col md:flex-row bg-white overflow-hidden">
 
         {/* Left Side: Purple Panel */}
-        <div className="md:w-[40%] bg-linear-to-r from-[#6633cc] to-[#5c33a3] text-white flex flex-col items-center justify-center p-12 text-center order-2 md:order-1 relative h-full min-h-[40vh] md:min-h-screen">
-          <div className="absolute top-10 left-10 flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-lg">
-              <FaComments size={20} />
-            </div>
-            <span className="font-bold text-2xl tracking-tight">Chatty</span>
-          </div>
+        <div className="md:w-[40%] bg-linear-to-r from-[#6633cc] to-[#5c33a3] text-white flex flex-col items-center justify-center p-12 text-center order-2 md:order-1 relative min-h-[40vh] md:h-full">
+
 
           <div className="max-w-[420px]">
             <h2 className="text-5xl font-extrabold mb-8 tracking-tight">Join the Conversation!</h2>
@@ -82,7 +77,7 @@ const JoinRoom: React.FC = () => {
         </div>
 
         {/* Right Side: Join Form (White) */}
-        <div className="md:w-[60%] bg-white flex flex-col items-center justify-center order-1 md:order-2 h-full min-h-[60vh] md:min-h-screen">
+        <div className="md:w-[60%] bg-white flex flex-col items-center justify-center order-1 md:order-2 min-h-[60vh] md:h-full">
           <div className="w-full max-w-[420px] flex flex-col items-center">
             <h1 className="text-5xl font-black text-[#6633cc] mb-10 tracking-tight">Join Room</h1>
 

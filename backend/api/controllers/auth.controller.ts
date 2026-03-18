@@ -41,7 +41,7 @@ export const signOut = (req: Request, res: Response) => {
 export const getUserInfo = async (req: any, res: Response, next: NextFunction) => {
   try {
     const user = req.user
-    console.log("user here", user);
+
 
     return res.status(200).json({ message: 'User info fetched successfully', user });
   } catch (err) {

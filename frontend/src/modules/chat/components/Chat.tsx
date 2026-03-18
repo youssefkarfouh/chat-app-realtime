@@ -42,7 +42,7 @@ const ChatRoom: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-800 text-white">
+    <div className="flex flex-col h-full bg-gray-800 text-white">
       <TopBar roomId={roomId as string} onLogout={handleLogout} />
       <div className="flex-1 overflow-auto p-4">
         {isLoading ? (

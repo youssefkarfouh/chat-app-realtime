@@ -1,20 +1,24 @@
 import { Request, Response } from 'express';
-import * as userService from '../services/user.service';
+
 import * as messageService from '../services/message.service';
 import * as roomService from '../services/room.service';
 
-export const joinChat = async (req: Request, res: Response): Promise<void> => {
+export const joinChat = async (req: any, res: Response): Promise<void> => {
   try {
-    const { userId, socketId, roomId } = req.body;
-    if (!userId || !socketId || !roomId) {
+
+    const user = req.user
+    console.log("user here in join chat api", user);
+
+    const { roomId } = req.body;
+    if (!user._id || !roomId) {
       res
         .status(400)
-        .json({ message: 'userId, socketId, and roomId are required' });
+        .json({ message: 'userId and roomId are required' });
       return;
     }
 
 
-    await roomService.addUserToRoom(roomId, userId);
+    await roomService.addUserToRoom(roomId, user._id);
     res.status(201).json({ message: 'User joined' });
   } catch (error) {
     console.error('Error in joinChat:', error);
