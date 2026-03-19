@@ -7,10 +7,10 @@ export const handleSocketConnection = (io: Server) => {
     console.log(`User connected: ${socket.id}`);
 
     // when user want to join a room
-    socket.on('join', async ({ name, roomId }) => {
+    socket.on('join', async ({ roomId }) => {
 
       socket.join(roomId);
-      console.log(`${name} joined room: ${roomId}`);
+      console.log(`User joined room: ${roomId}`);
     });
 
     // when user sends a message

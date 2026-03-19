@@ -17,7 +17,6 @@ export const joinChat = async (req: any, res: Response): Promise<void> => {
       return;
     }
 
-
     await roomService.addUserToRoom(roomId, user._id);
     res.status(201).json({ message: 'User joined' });
   } catch (error) {

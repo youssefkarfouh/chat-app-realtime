@@ -25,7 +25,7 @@ export const signIn = async (
     const { email, password } = req.body;
 
     const response = await userService.signIn(email, password, res);
-    return res.status(200).json({ message: 'Signed in successfully', token: response });
+    return res.status(200).json({ message: 'Signed in successfully', access_token: response });
   } catch (err) {
     next(err);
   }
