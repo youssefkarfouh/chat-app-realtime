@@ -15,15 +15,24 @@ export const handleSocketConnection = (io: Server) => {
 
     // when user sends a message
     socket.on('sendMessage', async ({ roomId, senderId, username, text }) => {
-      const message = await messageService.createMessage(
-        roomId,
-        senderId,
-        username,
-        text,
-      );
+      if (!roomId || !senderId || !username || !text) {
+        console.error('sendMessage: missing required fields', { roomId, senderId, username, text });
+        return;
+      }
 
-      io.to(roomId).emit('sendMessage', message);
-      console.log("new message received backend", message);
+      try {
+        const message = await messageService.createMessage(
+          roomId,
+          senderId,
+          username,
+          text,
+        );
+
+        io.to(roomId).emit('sendMessage', message);
+        console.log("new message received backend", message);
+      } catch (error) {
+        console.error('sendMessage: failed to create message', error);
+      }
     });
 
     // when user disconnects

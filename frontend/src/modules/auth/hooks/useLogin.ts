@@ -12,8 +12,8 @@ export const useLogin = () => {
         onSuccess: (response) => {
             console.log("response", response);
 
-            const { token } = response;
-            setAccessToken(token);
+            const { access_token } = response;
+            setAccessToken(access_token);
             AuthService.getUserInfo().then((user) => {
                 setUser(user);
 
